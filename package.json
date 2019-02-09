@@ -1,18 +1,14 @@
 {
-  "name": "mongo_homework",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "homepage": "https://github.com/Shahriar87/Raspador#readme",
   "dependencies": {
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
     "express-handlebars": "^3.0.0",
-    "mongoose": "^5.1.6"
+    "heroku": "^7.19.4",
+    "mongoose": "^5.4.2",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.9",
+    "npm": "^6.5.0"
   }
 }

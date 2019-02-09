@@ -1,42 +1,58 @@
-// Web Scraper Homework Solution Example
-// (be sure to watch the video to see
-// how to operate the site in the browser)
-// -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/
-
-// Require our dependencies
+// ----- Dependancies
 var express = require("express");
 var mongoose = require("mongoose");
-var exphbs = require("express-handlebars");
+var EHB = require("express-handlebars");
+var bodyParser = require ("body-parser");
 
-// Set up our port to be either the host's designated port, or 3000
-var PORT = process.env.PORT || 3000;
 
-// Instantiate our Express App
-var app = express();
+//port set up to listen on host's port or port 3000
+ var PORT = process.env.PORT ||3000;
 
-// Require our routes
-var routes = require("./routes");
+ //Start the Express App
+ var app = express ();
 
-// Parse request body as JSON
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-// Make public a static folder
-app.use(express.static("public"));
 
-// Connect Handlebars to our Express app
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
 
-// Have every request go through our route middleware
-app.use(routes);
 
-// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+ //Setup  Express Router
+  var router = express.Router();
 
-// Connect to the Mongo DB
-mongoose.connect(MONGODB_URI);
+  require("./config/routes")(router);
 
-// Listen on the port
-app.listen(PORT, function() {
-  console.log("Listening on port: " + PORT);
+  //Mark public folder as static Directory
+  app.use(express.static(__dirname + "/public"));
+
+  //app handelbars to the app 
+  app.engine("handelbars", EHB({
+    defaultLayout: "main"
+  }));
+
+
+  //use bodyparser in the app
+app.use (bodyParser.urlencoded ({
+    extended: false
+}));
+  
+  app.use (router);
+
+  // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var MDB = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
+// Connect to the Mongo DB 
+mongoose.connect(MDB, function(error){
+//also console log any errors if present
+    if (error){
+    console.log(error);
+}
+//or show message
+else {
+    console.log ("mongoose connection is successful")
+}
 });
+
+
+  //Listen on the port will display "Listing on port" if working 
+  app.listen(PORT, function() {
+console.log ("Listing on port:" + PORT);
+
+  });
