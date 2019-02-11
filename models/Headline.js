@@ -22,3 +22,5 @@ var mongoose = require ('mongoose')
  });
 
 var Headline = mongoose.model('Headline', headlineSchema); 
+ 
+module.exports = Headline;

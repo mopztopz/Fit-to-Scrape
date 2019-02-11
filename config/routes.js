@@ -1,9 +1,79 @@
-module.exports = function(router){
+var scrape = require("../scripts/scrape.js");
+
+var headlinesController = require("../controllers/headlines");
+var notesController = require("../controllers/notes");
+
+module.exports = function (router) {
     router.get("/", function (req, res) {
         res.render("home");
-     });
-
-    router.get ("/saved", function(req, res){
+    });
+    router.get("/saved", function (req, res) {
         res.render("saved");
+    });
+
+    router.get("/saved", function (req, res) {
+        res.render("saved");
+    });
+
+    router.get("/api/fetch", function (req, res) {
+        headlinesController.fetch(function (err, docs) {
+            if (!docs || docs.insertedCount === 0) {
+                res.json({
+                    Message: "No new areticles today. Check back tomorrow!"
+                });
+            } else {
+                res.json({
+                    Message: "Added" + docs.insertedCount + " new articles!"
+                });
+            }
+        });
+    });
+    router.get("/api/hedlines", function name(req, res) {
+        var query = {};
+        if (req.query.saved) {
+            query = req.query;
+        }
+
+        headlinesController.get(query, function (data) {
+            res.json(data);
+        });
+    });
+
+    router.delete("/api/headlines/:id", function (req, res) {
+        var query = {};
+        query._id = req.params.id;
+        headlinesController.delete(query, function (err, data) {
+            res.json(data);
+        });
+    });
+
+    router.patch("/api/headlines/", function (req, res) {
+        headlinesController.update(req.body, function (err, data) {
+            res.json(data);
+        });
+    });
+    router.get("/api/notes/:hedline_id?", function (req, res) {
+        var query = {};
+        if (req.params.headline_id) {
+            query.id = req.params.headline_id;
+        }
+
+        notesController.get(query, function (err, data) {
+            res.json(data);
+        });
+    });
+
+    router.delete("/api/notes/:id", function (req, res) {
+        var query = {};
+        query._id = req.params.id;
+        notesController.delete(query, function (err, data) {
+            res.json(data);
+        });
+
+    });
+    router.post("/api/notes", function (req, res) {
+        notesController.save(req.body, function (data) {
+            res.json(data);
+        });
     });
 }
